@@ -1,11 +1,11 @@
-.PHONY: all fmt test eg clean
-all: fmt mod.ts test eg
+.PHONY: all fmt test example clean
+all: fmt mod.ts test
 
-colors.html: scripts/download_colors.ts
-	deno --allow-net --allow-write=colors.html scripts/download_colors.ts
+colors.html:
+	curl -fsSL -o colors.html https://www.w3schools.com/colors/colors_names.asp
 
-mod.ts: scripts/parse_colors.ts colors.html
-	deno --allow-read=colors.html --allow-write=mod.ts scripts/parse_colors.ts
+mod.ts: gen_mod.ts colors.html
+	deno --allow-read=colors.html --allow-write=mod.ts gen_mod.ts
 
 test:
 	deno test.ts
@@ -13,8 +13,5 @@ test:
 fmt:
 	deno fmt test.ts example.ts scripts/*.ts
 
-eg:
-	deno example.ts
-
 clean:
-	rm colors.html mod.ts
+	rm -f colors.html mod.ts

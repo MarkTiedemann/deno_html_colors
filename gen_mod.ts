@@ -1,10 +1,7 @@
-import {
-  readFileStr,
-  writeFileStr
-} from "https://deno.land/std@v0.11.0/fs/mod.ts";
+import * as fs from "https://deno.land/std@v0.11.0/fs/mod.ts";
 
-async function parseColors() {
-  let text = await readFileStr("colors.html");
+async function main() {
+  let text = await fs.readFileStr("colors.html");
   let regex = /<td><a target="_blank" href="\/colors\/color_tryit\.asp\?color=(\w+)\s*">\w+\s*<\/a>&nbsp;<\/td>/g;
   let colors = [];
   while (true) {
@@ -14,7 +11,7 @@ async function parseColors() {
   }
   console.assert(colors.length > 0);
   let mod = `export default [ "${colors.join('", "')}" ] as const;`;
-  await writeFileStr("mod.ts", mod);
+  await fs.writeFileStr("mod.ts", mod);
 }
 
-parseColors();
+main();
